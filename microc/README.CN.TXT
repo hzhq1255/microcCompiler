@@ -21,8 +21,8 @@ A. 生成词法扫描器 和 语法分析器 解释执行 Generating and compili
    can see this is due to a bug in fsyacc, which ignores the %nonassoc
    directives on GT LT GE LE).
 
-   fslex --unicode CLex.fsl
-   fsyacc --module CPar CPar.fsy
+   fslex  --lexlib Microsoft.FSharp.Text.Lexing  --unicode CLex.fsl
+   fsyacc --lexlib Microsoft.FSharp.Text.Lexing --parslib  Microsoft.FSharp.Text.Parsing --module CPar CPar.fsy
    
    //启动fsi
    fsi -r FsLexYacc.Runtime.dll Absyn.fs CPar.fs CLex.fs Parse.fs Interp.fs ParseAndRun.fs
