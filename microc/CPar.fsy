@@ -16,9 +16,10 @@ let nl = CstI 10
 
 %token <int> CSTINT CSTBOOL
 %token <string> CSTSTRING NAME
-
-%token CHAR ELSE IF INT NULL PRINT PRINTLN RETURN VOID WHILE
+/* add FOR */
+%token CHAR ELSE IF INT NULL PRINT PRINTLN RETURN VOID WHILE FOR 
 %token PREINC PREDEC  /* add */
+%token PLUSASSIGN MINUSASSIGN TIMESASSIGN DIVASSIGN MODASSIGN /* add += -= etc.*/
 %token PLUS MINUS TIMES DIV MOD
 %token EQ NE GT LT GE LE
 %token NOT SEQOR SEQAND
@@ -104,6 +105,7 @@ StmtM:  /* No unbalanced if-else */
   | RETURN SEMI                         { Return None          }
   | RETURN Expr SEMI                    { Return(Some($2))     }
   | Block                               { $1                   }
+  | FOR LPAR Expr SEMI Expr SEMI Expr RPAR StmtM { For($3, $5, $7, $9) }
   | IF LPAR Expr RPAR StmtM ELSE StmtM  { If($3, $5, $7)       }
   | WHILE LPAR Expr RPAR StmtM          { While($3, $5)        }
 ;
@@ -112,6 +114,7 @@ StmtU:
     IF LPAR Expr RPAR StmtM ELSE StmtU  { If($3, $5, $7)       }
   | IF LPAR Expr RPAR Stmt              { If($3, $5, Block []) }
   | WHILE LPAR Expr RPAR StmtU          { While($3, $5)        }
+  | FOR LPAR Expr SEMI Expr SEMI Expr RPAR StmtU { For($3, $5, $7, $9) }
 ;
 
 Expr: 
@@ -123,6 +126,11 @@ ExprNotAccess:
     AtExprNotAccess                     { $1                  }
   | PREINC Access                       { PreInc $2           }
   | PREDEC Access                       { PreDec $2           }
+  | Access PLUSASSIGN Expr              { AssignPrim("+=", $1, $3) }
+  | Access MINUSASSIGN Expr             { AssignPrim("-=", $1, $3) }
+  | Access TIMESASSIGN Expr             { AssignPrim("*=", $1, $3) }
+  | Access DIVASSIGN Expr               { AssignPrim("/=", $1, $3) }
+  | Access MODASSIGN Expr               { AssignPrim("%=", $1, $3) }
   | Access ASSIGN Expr                  { Assign($1, $3)      }
   | NAME LPAR Exprs RPAR                { Call($1, $3)        }  
   | NOT Expr                            { Prim1("!", $2)      }

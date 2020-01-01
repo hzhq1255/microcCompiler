@@ -223,6 +223,14 @@ let rec exec stmt (locEnv : locEnv) (gloEnv : gloEnv) (store : store) : store =
       
       loop stmts (locEnv, store) 
     | Return _ -> failwith "return not implemented"
+    | For(e1,e2,e3,body) ->
+      let (v, store1) = eval e1 locEnv gloEnv store
+      let rec loop store1 = 
+          let (v,store2) = eval e2 locEnv gloEnv store1
+          if v<>0 then loop(snd(eval e3 locEnv gloEnv (exec body locEnv gloEnv store2)))
+          else store2
+      
+      loop store1
 
 and stmtordec stmtordec locEnv gloEnv store = 
     match stmtordec with 
@@ -246,6 +254,19 @@ and eval e locEnv gloEnv store : int * store =
                         (res, setSto store2 loc res) 
     | CstI i         -> (i, store)
     | Addr acc       -> access acc locEnv gloEnv store
+    | AssignPrim(ope, acc, e) ->
+      let (loc,store1) = access acc locEnv gloEnv store
+      let tmp = getSto store1 loc
+      let (res,store2) = eval e locEnv gloEnv store1
+      let num = 
+          match ope with
+          | "+=" -> tmp + res
+          | "-=" -> tmp - res
+          | "*=" -> tmp * res
+          | "/=" -> tmp / res
+          | "%=" -> tmp % res
+          | _    -> failwith("unkown primitive " + ope)
+      (num,setSto store2 loc num)
     | Prim1(ope, e1) ->
       let (i1, store1) = eval e1 locEnv gloEnv store
       let res =
