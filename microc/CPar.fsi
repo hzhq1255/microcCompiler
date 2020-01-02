@@ -36,6 +36,7 @@ type token =
   | SWITCH
   | CASE
   | COLON
+  | QUEST
   | CHAR
   | ELSE
   | IF
@@ -87,6 +88,7 @@ type tokenId =
     | TOKEN_SWITCH
     | TOKEN_CASE
     | TOKEN_COLON
+    | TOKEN_QUEST
     | TOKEN_CHAR
     | TOKEN_ELSE
     | TOKEN_IF

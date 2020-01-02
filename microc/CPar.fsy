@@ -18,7 +18,7 @@ let nl = CstI 10
 %token <string> CSTSTRING NAME
 /* add FOR */
 %token CHAR ELSE IF INT NULL PRINT PRINTLN RETURN VOID WHILE FOR 
-%token SWITCH CASE COLON/* add */
+%token SWITCH CASE COLON QUEST/* add */
 %token PREINC PREDEC /* add */
 %token PLUSASSIGN MINUSASSIGN TIMESASSIGN DIVASSIGN MODASSIGN /* add += -= etc.*/
 %token PLUS MINUS TIMES DIV MOD
@@ -31,7 +31,7 @@ let nl = CstI 10
 
 %right ASSIGN             /* lowest precedence */
 %nonassoc PRINT
-%nonassoc COLON
+%nonassoc QUEST COLON
 %left SEQOR
 %left SEQAND
 %left EQ NE 
@@ -158,6 +158,7 @@ ExprNotAccess:
   | Expr LT    Expr                     { Prim2("<",  $1, $3) }
   | Expr GE    Expr                     { Prim2(">=", $1, $3) }
   | Expr LE    Expr                     { Prim2("<=", $1, $3) }
+  | Expr QUEST Expr COLON Expr          { Prim3($1,$3,$5)     }
   | Expr SEQAND Expr                    { Andalso($1, $3)     }
   | Expr SEQOR  Expr                    { Orelse($1, $3)      }
 ;
