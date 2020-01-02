@@ -18,7 +18,8 @@ let nl = CstI 10
 %token <string> CSTSTRING NAME
 /* add FOR */
 %token CHAR ELSE IF INT NULL PRINT PRINTLN RETURN VOID WHILE FOR 
-%token PREINC PREDEC  /* add */
+%token SWITCH CASE COLON/* add */
+%token PREINC PREDEC /* add */
 %token PLUSASSIGN MINUSASSIGN TIMESASSIGN DIVASSIGN MODASSIGN /* add += -= etc.*/
 %token PLUS MINUS TIMES DIV MOD
 %token EQ NE GT LT GE LE
@@ -30,6 +31,7 @@ let nl = CstI 10
 
 %right ASSIGN             /* lowest precedence */
 %nonassoc PRINT
+%nonassoc COLON
 %left SEQOR
 %left SEQAND
 %left EQ NE 
@@ -108,7 +110,16 @@ StmtM:  /* No unbalanced if-else */
   | FOR LPAR Expr SEMI Expr SEMI Expr RPAR StmtM { For($3, $5, $7, $9) }
   | IF LPAR Expr RPAR StmtM ELSE StmtM  { If($3, $5, $7)       }
   | WHILE LPAR Expr RPAR StmtM          { While($3, $5)        }
+  | SWITCH LPAR Expr RPAR LBRACE CaseList RBRACE { Switch($3, $6) }
 ;
+
+CaseList:
+                                        { []                   }
+  | CaseDec                             { [$1]                 }
+  | CaseDec CaseList                    { $1 :: $2             }
+
+CaseDec:
+    CASE Expr COLON Stmt                { ($2,$4)              }
 
 StmtU:
     IF LPAR Expr RPAR StmtM ELSE StmtU  { If($3, $5, $7)       }

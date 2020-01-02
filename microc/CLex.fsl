@@ -20,8 +20,8 @@ let keyword s =
     | "else"    -> ELSE
     // | "elif"    -> ELIF // add and not completed
     | "if"      -> IF
-    // | "switch"  -> SWITCH // add and not completed
-    // | "case"    -> CASE // add and not completed
+    | "switch"  -> SWITCH // add and not completed
+    | "case"    -> CASE // add and not completed
     | "false"   -> CSTBOOL 0
     | "int"     -> INT
     | "null"    -> NULL
@@ -31,7 +31,7 @@ let keyword s =
     | "true"    -> CSTBOOL 1
     | "void"    -> VOID 
     | "while"   -> WHILE
-    | "for"     -> FOR //add and not completed
+    | "for"     -> FOR //add and completed
     // | "lambda"  -> LAMBDA //add and not completed
     | _         -> NAME s
  
@@ -85,6 +85,7 @@ rule Token = parse
   | '['             { LBRACK }
   | ']'             { RBRACK }
   | ';'             { SEMI }
+  | ':'             { COLON }
   | ','             { COMMA }
   | "//"            { EndLineComment lexbuf; Token lexbuf }
   | "/*"            { Comment lexbuf; Token lexbuf }

@@ -33,6 +33,9 @@ type token =
   | MODASSIGN
   | PREINC
   | PREDEC
+  | SWITCH
+  | CASE
+  | COLON
   | CHAR
   | ELSE
   | IF
@@ -81,6 +84,9 @@ type tokenId =
     | TOKEN_MODASSIGN
     | TOKEN_PREINC
     | TOKEN_PREDEC
+    | TOKEN_SWITCH
+    | TOKEN_CASE
+    | TOKEN_COLON
     | TOKEN_CHAR
     | TOKEN_ELSE
     | TOKEN_IF
@@ -112,6 +118,8 @@ type nonTerminalId =
     | NONTERM_StmtOrDecSeq
     | NONTERM_Stmt
     | NONTERM_StmtM
+    | NONTERM_CaseList
+    | NONTERM_CaseDec
     | NONTERM_StmtU
     | NONTERM_Expr
     | NONTERM_ExprNotAccess
