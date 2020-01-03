@@ -37,6 +37,7 @@ type token =
   | CASE
   | COLON
   | QUEST
+  | LAMBDA
   | CHAR
   | ELSE
   | IF
@@ -89,6 +90,7 @@ type tokenId =
     | TOKEN_CASE
     | TOKEN_COLON
     | TOKEN_QUEST
+    | TOKEN_LAMBDA
     | TOKEN_CHAR
     | TOKEN_ELSE
     | TOKEN_IF

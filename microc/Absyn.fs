@@ -27,6 +27,7 @@ and expr =
   | Andalso of expr * expr           (* Sequential and              *)
   | Orelse of expr * expr            (* Sequential or               *)
   | Call of string * expr list       (* Function call f(...)        *)
+
                                                                    
 and access =                                                       
   | AccVar of string                 (* Variable access        x    *) 
@@ -41,6 +42,7 @@ and stmt =
   | Block of stmtordec list          (* Block: grouping and scope   *)
   | For of expr * expr * expr * stmt (* For loop                    *)
   | Switch of expr *(expr * stmt) list (*switch                     *)
+  | Lambda of string * expr * stmt   (* x -> x+2 return x+2         *)
                                                                    
 and stmtordec =                                                    
   | Dec of typ * string              (* Local variable declaration  *)
